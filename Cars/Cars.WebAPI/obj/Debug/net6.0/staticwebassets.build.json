@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "faEYsPYLoQeC63D1gKeUEOtLdqrPv0loep1XnBJKAhU=",
+  "Source": "Cars.WebAPI",
+  "BasePath": "_content/Cars.WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
