@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Management</title>
+    <style>
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        input {
+            display: block;
+            margin: 5px 0;
+            padding: 5px;
+            width: 100%;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f9f9f9;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Car Management</h1>
+
+    <div>
+        <h2>Car List</h2>
+        <ul id="carList"></ul>
+    </div>
+
+    <div>
+        <h2>Add Car</h2>
+        <input type="text" id="brand" placeholder="Brand">
+        <input type="number" id="power" placeholder="Power">
+        <input type="number" id="price" placeholder="Price">
+        <input type="text" id="color" placeholder="Color">
+        <button id="addCar">Add Car</button>
+    </div>
+
+    <div>
+        <h2>Update Car</h2>
+        <input type="number" id="updateId" placeholder="Car ID">
+        <input type="text" id="updateBrand" placeholder="Brand">
+        <input type="number" id="updatePower" placeholder="Power">
+        <input type="number" id="updatePrice" placeholder="Price">
+        <input type="text" id="updateColor" placeholder="Color">
+        <button id="updateCar">Update Car</button>
+    </div>
+
+    <div>
+        <h2>Delete Car</h2>
+        <input type="number" id="deleteId" placeholder="Car ID">
+        <button id="deleteCar">Delete Car</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadCars() {
+            $.ajax({
+                url: 'https://localhost:7109/api/cars',
+                type: 'GET',
+                success: function (data) {
+                    $('#carList').empty();
+
+                    $.each(data, function (index, car) {
+                        $('#carList').append('<li>ID: ' + car.id + ', Brand: ' + car.brand + ', Power: ' + car.power + ', Price: ' + car.price + ', Color: ' + car.color + '</li>');
+                    });
+                }
+            });
+        }
+
+        function addCar() {
+            var brand = $('#brand').val();
+            var power = $('#power').val();
+            var price = $('#price').val();
+            var color = $('#color').val();
+
+            $.ajax({
+                url: 'https://localhost:7109/api/cars',
+                type: 'POST',
+                data: JSON.stringify({ brand: brand, power: power, price: price, color: color }),
+                contentType: 'application/json',
+                success: function () {
+                    loadCars();
+                }
+            });
+        }
+
+        function updateCar() {
+            var id = $('#updateId').val();
+            var brand = $('#updateBrand').val();
+            var power = $('#updatePower').val();
+            var price = $('#updatePrice').val();
+            var color = $('#updateColor').val();
+
+            $.ajax({
+                url: 'https://localhost:7109/api/cars/' + id,
+                type: 'PUT',
+                data: JSON.stringify({ brand: brand, power: power, price: price, color: color }),
+                contentType: 'application/json',
+                success: function () {
+                    loadCars();
+                }
+            });
+        }
+
+        function deleteCar() {
+            var id = $('#deleteId').val();
+
+            $.ajax({
+                url: 'https://localhost:7109/api/cars/' + id,
+                type: 'DELETE',
+                success: function () {
+                    loadCars();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadCars();
+
+            $('#addCar').click(addCar);
+            $('#updateCar').click(updateCar);
+            $('#deleteCar').click(deleteCar);
+        });
+
+    </script>
+</body>
+</html>
