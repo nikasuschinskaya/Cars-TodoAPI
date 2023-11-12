@@ -8,20 +8,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
+builder.Services.AddCors();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IRepository<CarEntity>, CarRepository>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-if (builder.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 
